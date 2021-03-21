@@ -16,6 +16,7 @@ class CalculationApp {
     inputHowManyInputs: HTMLInputElement;
 
     constructor() {
+        this.flag = false;
         this.runApp();
     }
     runApp() {
@@ -35,7 +36,6 @@ class CalculationApp {
 
             if (e.target instanceof Element && e.target.tagName == "INPUT" && e.target.id !== "input5" && e.target.parentElement.id !== "results" && this.flag == true) {
                 this.elementsArray = Array.prototype.slice.call(document.querySelectorAll('#inputForm>input'));
-                // e.target.setAttribute('class', 'selected');
 
                 e.target.hasAttribute('class') ? e.target.removeAttribute('class') : e.target.setAttribute('class', 'selected');
 
@@ -51,7 +51,7 @@ class CalculationApp {
     watchButtons() {
         this.declareButton.addEventListener('click', () => {
             if (this.flag == false) {
-                this.declareButton.innerHTML = 'Zaznacz inputy do usuniecia';
+                this.declareButton.innerHTML = 'Zaznacz inputy do usuniecia lub wróc';
                 this.flag = true;
                 this.deleteButton.removeAttribute('class');
 
@@ -60,6 +60,7 @@ class CalculationApp {
                 this.declareButton.innerHTML = 'Chce usunac pliki';
                 this.flag = false;
                 this.deleteButton.setAttribute('class', 'not-visible');
+                this.elementsArray.forEach(element => element.removeAttribute('class'));
             }
 
         });

@@ -1,5 +1,6 @@
 var CalculationApp = /** @class */ (function () {
     function CalculationApp() {
+        this.flag = false;
         this.runApp();
     }
     CalculationApp.prototype.runApp = function () {
@@ -17,7 +18,6 @@ var CalculationApp = /** @class */ (function () {
         document.body.addEventListener('click', function (e) {
             if (e.target instanceof Element && e.target.tagName == "INPUT" && e.target.id !== "input5" && e.target.parentElement.id !== "results" && _this.flag == true) {
                 _this.elementsArray = Array.prototype.slice.call(document.querySelectorAll('#inputForm>input'));
-                // e.target.setAttribute('class', 'selected');
                 e.target.hasAttribute('class') ? e.target.removeAttribute('class') : e.target.setAttribute('class', 'selected');
             }
         });
@@ -30,7 +30,7 @@ var CalculationApp = /** @class */ (function () {
         var _this = this;
         this.declareButton.addEventListener('click', function () {
             if (_this.flag == false) {
-                _this.declareButton.innerHTML = 'Zaznacz inputy do usuniecia';
+                _this.declareButton.innerHTML = 'Zaznacz inputy do usuniecia lub wróc';
                 _this.flag = true;
                 _this.deleteButton.removeAttribute('class');
             }
@@ -38,6 +38,7 @@ var CalculationApp = /** @class */ (function () {
                 _this.declareButton.innerHTML = 'Chce usunac pliki';
                 _this.flag = false;
                 _this.deleteButton.setAttribute('class', 'not-visible');
+                _this.elementsArray.forEach(function (element) { return element.removeAttribute('class'); });
             }
         });
         this.deleteButton.addEventListener('click', function () {
