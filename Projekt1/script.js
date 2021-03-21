@@ -1,6 +1,7 @@
 var CalculationApp = /** @class */ (function () {
     function CalculationApp() {
         this.flag = false;
+        this.inputNumberOperator = true;
         this.runApp();
     }
     CalculationApp.prototype.runApp = function () {
@@ -35,10 +36,12 @@ var CalculationApp = /** @class */ (function () {
                 _this.deleteButton.removeAttribute('class');
             }
             else {
-                _this.declareButton.innerHTML = 'Chce usunac pliki';
+                _this.declareButton.innerHTML = 'Chce usunac inputs';
                 _this.flag = false;
                 _this.deleteButton.setAttribute('class', 'not-visible');
-                _this.elementsArray.forEach(function (element) { return element.removeAttribute('class'); });
+                if (_this.elementsArray != null) {
+                    _this.elementsArray.forEach(function (element) { return element.removeAttribute('class'); });
+                }
             }
         });
         this.deleteButton.addEventListener('click', function () {
@@ -84,7 +87,9 @@ var CalculationApp = /** @class */ (function () {
                     _this.resultInputs.forEach(function (element) { return _this.setClassLoadingAttribute(element); });
                 });
                 customInput.addEventListener('blur', function () {
-                    _this.resultInputs.forEach(function (element) { return _this.removeClassAttribute(element); });
+                    if (_this.inputNumberOperator == true) {
+                        _this.resultInputs.forEach(function (element) { return _this.removeClassAttribute(element); });
+                    }
                 });
                 customInput.addEventListener('input', function () { return _this.calculations(); });
                 formContainInputs.appendChild(customInput);
@@ -109,19 +114,27 @@ var CalculationApp = /** @class */ (function () {
         var sumElements = 0;
         var inputElementValue = [];
         for (var i = 0; i < this.inputFormElements.length; i++) {
-            if (parseInt(this.inputFormElements[i].value)) {
-                inputElementValue.push(parseInt(this.inputFormElements[i].value));
+            if (parseInt(this.inputFormElements[i].value) >= 0) {
+                this.resultInputs.forEach(function (element) { return element.hasAttribute('class') ? _this.removeClassAttribute(element) : null; });
+                this.inputNumberOperator = true;
+                if (parseInt(this.inputFormElements[i].value)) {
+                    inputElementValue.push(parseInt(this.inputFormElements[i].value));
+                }
+                else {
+                    inputElementValue.push(0);
+                }
+                var sumAllElements = inputElementValue.reduce(function (a, b) { return +a + +b; }, 0);
+                this.sumElement.value = sumAllElements.toString();
+                this.averageElement.value = (sumAllElements / inputElementValue.length).toString();
+                this.minElement.value = (Math.min.apply(null, inputElementValue)).toString();
+                this.maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
+                this.resultInputs.forEach(function (element) { return _this.removeClassAttribute(element); });
             }
-            else {
-                inputElementValue.push(0);
+            else if (parseInt(this.inputFormElements[i].value) < 0) {
+                this.resultInputs.forEach(function (element) { return element.setAttribute('class', 'loading'); });
+                this.inputNumberOperator = false;
             }
         }
-        var sumAllElements = inputElementValue.reduce(function (a, b) { return +a + +b; }, 0);
-        this.sumElement.value = sumAllElements.toString();
-        this.averageElement.value = (sumAllElements / inputElementValue.length).toString();
-        this.minElement.value = (Math.min.apply(null, inputElementValue)).toString();
-        this.maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
-        this.resultInputs.forEach(function (element) { return _this.removeClassAttribute(element); });
     };
     return CalculationApp;
 }());

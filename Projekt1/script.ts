@@ -4,6 +4,7 @@ class CalculationApp {
     declareButton: HTMLButtonElement;
     //flag propertis
     flag: boolean;
+    inputNumberOperator: boolean;
     //Arrays properties
     elementsArray: Array<HTMLHtmlElement>;
     resultInputs: Array<HTMLInputElement>;
@@ -17,6 +18,7 @@ class CalculationApp {
 
     constructor() {
         this.flag = false;
+        this.inputNumberOperator = true;
         this.runApp();
     }
     runApp() {
@@ -57,10 +59,12 @@ class CalculationApp {
 
             }
             else {
-                this.declareButton.innerHTML = 'Chce usunac pliki';
+                this.declareButton.innerHTML = 'Chce usunac inputs';
                 this.flag = false;
                 this.deleteButton.setAttribute('class', 'not-visible');
-                this.elementsArray.forEach(element => element.removeAttribute('class'));
+                if (this.elementsArray != null) {
+                    this.elementsArray.forEach(element => element.removeAttribute('class'));
+                }
             }
 
         });
@@ -121,7 +125,10 @@ class CalculationApp {
                     this.resultInputs.forEach(element => this.setClassLoadingAttribute(element));
                 });
                 customInput.addEventListener('blur', () => {
-                    this.resultInputs.forEach(element => this.removeClassAttribute(element));
+                    if (this.inputNumberOperator == true) {
+                        this.resultInputs.forEach(element => this.removeClassAttribute(element));
+                    }
+
                 });
                 customInput.addEventListener('input', () => this.calculations());
                 formContainInputs.appendChild(customInput);
@@ -156,22 +163,30 @@ class CalculationApp {
         let inputElementValue: Array<Number> = [];
 
         for (let i = 0; i < this.inputFormElements.length; i++) {
-            if (parseInt(this.inputFormElements[i].value)) {
-                inputElementValue.push(parseInt(this.inputFormElements[i].value));
-            }
-            else {
-                inputElementValue.push(0);
-            }
+            if (parseInt(this.inputFormElements[i].value) >= 0) {
+                this.resultInputs.forEach(element => element.hasAttribute('class') ? this.removeClassAttribute(element) : null);
+                this.inputNumberOperator = true;
+                if (parseInt(this.inputFormElements[i].value)) {
+                    inputElementValue.push(parseInt(this.inputFormElements[i].value));
+                }
+                else {
+                    inputElementValue.push(0);
+                }
+                let sumAllElements: Number = inputElementValue.reduce((a, b) => +a + +b, 0);
 
+
+                this.sumElement.value = sumAllElements.toString();
+                this.averageElement.value = (<number>sumAllElements / inputElementValue.length).toString();
+                this.minElement.value = (Math.min.apply(null, inputElementValue)).toString();
+                this.maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
+                this.resultInputs.forEach(element => this.removeClassAttribute(element));
+            }
+            else if (parseInt(this.inputFormElements[i].value) < 0) {
+                this.resultInputs.forEach(element => element.setAttribute('class', 'loading'));
+                this.inputNumberOperator = false;
+            }
         }
-        let sumAllElements: Number = inputElementValue.reduce((a, b) => +a + +b, 0);
 
-
-        this.sumElement.value = sumAllElements.toString();
-        this.averageElement.value = (<number>sumAllElements / inputElementValue.length).toString();
-        this.minElement.value = (Math.min.apply(null, inputElementValue)).toString();
-        this.maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
-        this.resultInputs.forEach(element => this.removeClassAttribute(element));
     }
 
 }
