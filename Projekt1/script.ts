@@ -76,6 +76,8 @@ class CalculationApp {
                 this.declareButton.innerHTML = 'Chce usunac pliki';
                 this.deleteButton.setAttribute('class', 'not-visible');
                 this.flag = false;
+                this.getInputFormElements();
+                this.calculations();
             }
 
         })

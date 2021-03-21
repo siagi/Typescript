@@ -50,6 +50,8 @@ var CalculationApp = /** @class */ (function () {
                 _this.declareButton.innerHTML = 'Chce usunac pliki';
                 _this.deleteButton.setAttribute('class', 'not-visible');
                 _this.flag = false;
+                _this.getInputFormElements();
+                _this.calculations();
             }
         });
     };
