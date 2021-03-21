@@ -19,7 +19,6 @@ class CalculationApp {
         this.runApp();
     }
     runApp() {
-        this.watchDocument();
         this.getButtons();
         this.watchButtons();
         this.getResultInputs();
@@ -29,20 +28,6 @@ class CalculationApp {
         this.watchResultInputs();
     }
 
-    watchDocument() {
-        document.body.addEventListener('click', (e) => {
-
-
-            if (e.target instanceof Element && e.target.tagName == "INPUT" && e.target.id !== "input5" && e.target.parentElement.id !== "results" && this.flag == true) {
-                this.elementsArray = Array.prototype.slice.call(document.querySelectorAll('#inputForm>input'));
-                // e.target.setAttribute('class', 'selected');
-
-                e.target.hasAttribute('class') ? e.target.removeAttribute('class') : e.target.setAttribute('class', 'selected');
-
-            }
-        })
-    }
-
     getButtons() {
         this.deleteButton = document.querySelector('#deleteButton');
         this.declareButton = document.querySelector('#declareButton');
@@ -50,7 +35,7 @@ class CalculationApp {
 
     watchButtons() {
         this.declareButton.addEventListener('click', () => {
-            if (this.flag == false) {
+            if (flag == false) {
                 this.declareButton.innerHTML = 'Zaznacz inputy do usuniecia';
                 this.flag = true;
                 this.deleteButton.removeAttribute('class');
@@ -107,7 +92,7 @@ class CalculationApp {
             this.maxElement.value = '';
             this.resultInputs.forEach(element => this.setClassLoadingAttribute(element));
 
-            let inputQuantity: Number = typeof (this.inputHowManyInputs.value) === "string" ? parseInt(this.inputHowManyInputs.value) : 0;
+            let inputQuantity: Number = typeof (inputHowManyInputs.value) === "string" ? parseInt(inputHowManyInputs.value) : 0;
             let formContainInputs: HTMLFormElement = document.querySelector('#inputForm');
 
             document.querySelectorAll('#inputForm>input').forEach(element => element.remove());
@@ -124,7 +109,7 @@ class CalculationApp {
                 });
                 customInput.addEventListener('input', () => this.calculations());
                 formContainInputs.appendChild(customInput);
-                this.inputFormElements = Array.prototype.slice.call(document.querySelectorAll('#inputForm>input'));
+                inputFormElements = Array.prototype.slice.call(document.querySelectorAll('#inputForm>input'));
             }
 
 
@@ -154,9 +139,9 @@ class CalculationApp {
         let sumElements: Number = 0;
         let inputElementValue: Array<Number> = [];
 
-        for (let i = 0; i < this.inputFormElements.length; i++) {
-            if (parseInt(this.inputFormElements[i].value)) {
-                inputElementValue.push(parseInt(this.inputFormElements[i].value));
+        for (let i = 0; i < inputFormElements.length; i++) {
+            if (parseInt(inputFormElements[i].value)) {
+                inputElementValue.push(parseInt(inputFormElements[i].value));
             }
             else {
                 inputElementValue.push(0);
@@ -166,10 +151,10 @@ class CalculationApp {
         let sumAllElements: Number = inputElementValue.reduce((a, b) => +a + +b, 0);
 
 
-        this.sumElement.value = sumAllElements.toString();
-        this.averageElement.value = (<number>sumAllElements / inputElementValue.length).toString();
-        this.minElement.value = (Math.min.apply(null, inputElementValue)).toString();
-        this.maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
+        sumElement.value = sumAllElements.toString();
+        averageElement.value = (<number>sumAllElements / inputElementValue.length).toString();
+        minElement.value = (Math.min.apply(null, inputElementValue)).toString();
+        maxElement.value = (Math.max.apply(null, inputElementValue)).toString();
         this.resultInputs.forEach(element => this.removeClassAttribute(element));
     }
 
