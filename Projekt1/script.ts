@@ -8,13 +8,13 @@ declareButton.addEventListener('click', () => {
     if (flag == false) {
         declareButton.innerHTML = 'Zaznacz inputy do usuniecia';
         flag = true;
-        declareButton.removeAttribute('class');
+        deleteButton.removeAttribute('class');
 
     }
     else {
         declareButton.innerHTML = 'Chce usunac pliki';
         flag = false;
-        declareButton.setAttribute('class', 'not-visible');
+        deleteButton.setAttribute('class', 'not-visible');
     }
 
 })
@@ -22,6 +22,9 @@ deleteButton.addEventListener('click', () => {
     console.log(elementsArray);
     if (elementsArray !== null && flag == true) {
         elementsArray.forEach(element => element.hasAttribute('class') ? element.remove() : console.log('sdas'));
+        declareButton.innerHTML = 'Chce usunac pliki';
+        deleteButton.setAttribute('class', 'not-visible');
+        flag = false;
     }
 
     console.log(elementsArray.length);
